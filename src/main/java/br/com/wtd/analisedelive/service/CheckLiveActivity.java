@@ -10,7 +10,7 @@ public class CheckLiveActivity {
     private final String YOUTUBE_API_KEY = dotenv.get("YOUTUBE_API_KEY");
     private final ConsumeApi consume = new ConsumeApi();
 
-    public String checkActivity(String liveID) throws JsonProcessingException {
+    public String checkActivity(String liveID) throws Exception {
         String url = "https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id="+ liveID + "&key=" + YOUTUBE_API_KEY;
 
         String json = consume.getData(url);
@@ -20,15 +20,15 @@ public class CheckLiveActivity {
 
         JsonNode items = root.get("items");
         if (items == null || !items.isArray() || items.isEmpty()) {
-            return "Vídeo não encontrado.";
+            throw new Exception("Vídeo não encontrado.");
         }
 
         JsonNode liveStreamingDetails = items.get(0).get("liveStreamingDetails");
         if (liveStreamingDetails == null || liveStreamingDetails.get("activeLiveChatId") == null) {
-            return "Live Chat ID não encontrado. A live está realmente ativa?";
-        }else{
-            return "Live ativa!";
+            throw new Exception("Live Chat ID não encontrado. A live está realmente ativa?");
         }
+
+        return liveStreamingDetails.get("activeLiveChatId").asText();
     }
 }
 

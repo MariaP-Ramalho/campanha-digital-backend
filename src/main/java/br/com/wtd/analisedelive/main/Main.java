@@ -25,8 +25,13 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Insira o ID da live: ");
         String liveID = scanner.nextLine();
-        String liveStatus = checkLive.checkActivity(liveID);
-        System.out.println(liveStatus);
+        try{
+            String liveStatus = checkLive.checkActivity(liveID);
+            System.out.println("Live encontrada com sucesso!");
+            System.out.println("Live status: " + liveStatus);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
 }
