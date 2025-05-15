@@ -15,7 +15,11 @@ public class AnaliseDeLiveApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         Main main = new Main();
-        main.runMain();
+        try {
+            main.runMain();
+        } catch (Exception e) {
+            System.err.println("Erro ao rodar runMain: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
-
 }
