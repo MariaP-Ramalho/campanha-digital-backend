@@ -1,19 +1,28 @@
 package br.com.wtd.analisedelive.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.cdimascio.dotenv.Dotenv;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+
+import java.util.Objects;
 
 public class CheckLiveActivity {
     private final Dotenv dotenv = Dotenv.load();
+    private final OkHttpClient client = new OkHttpClient();
     private final String YOUTUBE_API_KEY = dotenv.get("YOUTUBE_API_KEY");
     private final ConsumeApi consume = new ConsumeApi();
 
     public String checkActivity(String liveID) throws Exception {
-        String url = "https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id="+ liveID + "&key=" + YOUTUBE_API_KEY;
+        HttpUrl url = Objects.requireNonNull(HttpUrl.parse("https://www.googleapis.com/youtube/v3/videos"))
+                .newBuilder()
+                .addQueryParameter("part", "liveStreamingDetails")
+                .addQueryParameter("id", liveID)
+                .addQueryParameter("key", YOUTUBE_API_KEY)
+                .build();
 
-        String json = consume.getData(url);
+        String json = consume.getData(String.valueOf(url));
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(json);
