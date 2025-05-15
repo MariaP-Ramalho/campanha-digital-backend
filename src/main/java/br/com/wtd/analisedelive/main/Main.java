@@ -18,7 +18,6 @@ public class Main {
     private final String YOUTUBE_API_KEY = dotenv.get("YOUTUBE_API_KEY");
     private final String SHEET_ID = dotenv.get("SHEET_ID");
 
-    private final String url = "https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id="+ VIDEO_ID+ "&key=" + YOUTUBE_API_KEY;
 
     public void runMain() throws JsonProcessingException {
 
@@ -36,8 +35,8 @@ public class Main {
         }
 
         System.out.println("ID ATIVO: " + activeChatId);
-        String json = fetchLiveComments.fetchLiveComments(activeChatId);
-        System.out.println(json);
+        int numberOfCommentsFetched = fetchLiveComments.fetchLiveComments(activeChatId);
+        System.out.println("Número de comentários recuperados" + numberOfCommentsFetched);
     }
 
 }
