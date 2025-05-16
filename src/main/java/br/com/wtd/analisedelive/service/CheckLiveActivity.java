@@ -23,7 +23,6 @@ public class CheckLiveActivity {
                 .build();
 
         String json = consume.getData(String.valueOf(url));
-
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(json);
 

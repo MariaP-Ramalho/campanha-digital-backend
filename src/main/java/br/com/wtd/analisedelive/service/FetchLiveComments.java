@@ -16,7 +16,7 @@ public class FetchLiveComments {
     String lastPageToken = "";
     int totalResults = 0;
 
-    public int fetchLiveComments(String activeChatId) throws JsonProcessingException {
+    public String fetchLiveComments(String activeChatId) throws JsonProcessingException {
 
         HttpUrl url = Objects.requireNonNull(HttpUrl.parse("https://www.googleapis.com/youtube/v3/liveChat/messages\n"))
                 .newBuilder()
@@ -42,7 +42,6 @@ public class FetchLiveComments {
             totalResults = pageInfoNode.get("totalResults").asInt();
         }
 
-        System.out.println(json);
-        return totalResults;
+        return json;
     }
 }
