@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class OpenAIAnalysis {
@@ -28,6 +29,29 @@ public class OpenAIAnalysis {
 
     private static final String OPENAI_URL = "https://api.openai.com/v1/chat/completions";
     private static final ObjectMapper mapper = new ObjectMapper();
+
+    private static final String SYSTEM_MESSAGE = """
+    Você é um analista de comentários de lives. Sua tarefa é classificar cada comentário com dois números:
+
+      - O primeiro número representa o sentimento:
+        0 = Negativo
+        1 = Neutro
+        2 = Positivo
+
+      - O segundo número representa o tipo de interação:
+        3 = Pergunta
+        4 = Elogio
+        5 = Crítica
+        6 = Sugestão
+        7 = Meme / Piada
+        8 = Reclamação
+        9 = Reação emocional
+
+      Cada comentário deve ser seguido por sua classificação no formato,
+      Siga estritamente o padrão abaixo, não adicione mais nenhuma informação :
+      "<comentário>" → <sentimento> <tipo>
+      Caso não se encaixe exatamente em nenhuma categoria classifique com a categoria mais próxima e sempre siga o padrão fornecido.
+    """;
 
     public void analyzeCommentsBatch(List<CommentsInfo> comments) {
         List<List<CommentsInfo>> batches = partition(comments, 30);
@@ -44,19 +68,11 @@ public class OpenAIAnalysis {
     }
 
     private String buildPrompt(List<CommentsInfo> comments) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Aqui estão os comentários dos últimos 5 minutos:\n\n");
-        for (CommentsInfo c : comments) {
-            sb.append(c.getAuthorDetailsData()).append(": ").append(c.getCommentsDetailsData()).append("\n");
-        }
-
-        sb.append("\nClassifique-os com os códigos abaixo:\n")
-                .append("Formato: \"<comentário>\" → <sentimento> <tipo>\n")
-                .append("- Sentimento: 0 = Negativo, 1 = Neutro, 2 = Positivo\n")
-                .append("- Interação: 3 = Pergunta, 4 = Elogio, 5 = Crítica, 6 = Sugestão, 7 = Meme/Piada, 8 = Reclamação, 9 = Reação emocional");
-
-        return sb.toString();
+        return comments.stream()
+                .map(c -> "\"" + c.getCommentsDetailsData() + "\"")
+                .collect(Collectors.joining("\n"));
     }
+
 
     private String callOpenAI(String prompt) throws IOException, IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
@@ -64,7 +80,7 @@ public class OpenAIAnalysis {
         String body = mapper.writeValueAsString(Map.of(
                 "model", "gpt-4",
                 "messages", List.of(
-                        Map.of("role", "system", "content", "Você é um classificador de comentários de lives... (insira aqui o system message completo)"),
+                        Map.of("role", "system", "content", SYSTEM_MESSAGE),
                         Map.of("role", "user", "content", prompt)
                 ),
                 "temperature", 0.7
