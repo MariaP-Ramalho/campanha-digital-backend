@@ -44,4 +44,8 @@ public class FetchLiveComments {
 
         return json;
     }
+
+    public int getTotalResults() {
+        return totalResults;
+    }
 }
