@@ -46,13 +46,13 @@ public class OpenAIAnalysis {
         8 = Reclamação
         9 = Reação emocional
 
-      Siga estritamente o padrão abaixo, não adicione mais nenhuma informação :
-      "[ID] <comentário>" → <sentimento> <tipo>
+      Siga estritamente o padrão abaixo, não adicione nem remova nenhuma informação :
+      [ID] "<comentário>" → <sentimento> <tipo>
     
       Exemplo:
-      "[0] Muito bom!" → 2 4
+      [0] "Muito bom!" → 2 4
     
-      Não modifique o ID nem o conteúdo. Apenas classifique.
+      Não modifique o ID nem o comentário. Apenas classifique.
       Caso não se encaixe exatamente em nenhuma categoria classifique com a categoria mais próxima e sempre siga o padrão fornecido.
     """;
 
