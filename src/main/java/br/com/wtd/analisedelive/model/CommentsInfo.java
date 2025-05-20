@@ -22,6 +22,8 @@ public class CommentsInfo {
     @Enumerated(EnumType.STRING)
     private Interaction interaction;
 
+    private String liveVideoId;
+
     public CommentsInfo(){}
 
     public CommentsInfo(String commentId, CommentsDetailsData commentsDetailsData, AuthorDetailsData authorDetailsData, Sentiment sentiment, Interaction interaction) {
@@ -84,5 +86,13 @@ public class CommentsInfo {
 
     public void setInteraction(Interaction interaction) {
         this.interaction = interaction;
+    }
+
+    public String getLiveVideoId() {
+        return liveVideoId;
+    }
+
+    public void setLiveVideoId(String liveVideoId) {
+        this.liveVideoId = liveVideoId;
     }
 }

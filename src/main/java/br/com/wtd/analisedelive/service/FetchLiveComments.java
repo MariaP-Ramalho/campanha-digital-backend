@@ -42,6 +42,8 @@ public class FetchLiveComments {
             totalResults = pageInfoNode.get("totalResults").asInt();
         }
 
+        System.out.println("Total results: " + totalResults);
+
         return json;
     }
 

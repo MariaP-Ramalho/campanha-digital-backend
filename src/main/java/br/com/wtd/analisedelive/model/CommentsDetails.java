@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 @Embeddable
 public class CommentsDetails {
     private String commentLiveId;

@@ -9,8 +9,6 @@ import br.com.wtd.analisedelive.service.ConvertData;
 import br.com.wtd.analisedelive.service.FetchLiveComments;
 import br.com.wtd.analisedelive.service.OpenAIAnalysis;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.beans.factory.annotation.Autowired;
-
 
 import java.util.ArrayList;
 import java.util.List;
