@@ -1,12 +1,15 @@
 package br.com.wtd.analisedelive.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class AuthorDetails {
     private String channelId;
+    @Column(length = 512)
     private String channelUrl;
     private String userDisplayName;
+    @Column(length = 512)
     private String userProfileImageUrl;
 
     public AuthorDetails(String channelId, String channelUrl, String userDisplayName, String userProfileImageUrl) {

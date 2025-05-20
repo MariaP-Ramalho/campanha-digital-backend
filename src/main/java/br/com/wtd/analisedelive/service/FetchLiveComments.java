@@ -24,7 +24,7 @@ public class FetchLiveComments {
                 .addQueryParameter("part", "snippet,authorDetails")
                 .addQueryParameter("key", YOUTUBE_API_KEY)
                 .addQueryParameter("pageToken", lastPageToken)
-                .addQueryParameter("maxResults", "200")
+                .addQueryParameter("maxResults", "100")
                 .build();
 
         String json = consume.getData(String.valueOf(url));

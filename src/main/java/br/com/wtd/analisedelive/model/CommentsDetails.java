@@ -1,5 +1,6 @@
 package br.com.wtd.analisedelive.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.sql.Timestamp;
@@ -8,6 +9,8 @@ import java.time.LocalDateTime;
 public class CommentsDetails {
     private String commentLiveId;
     private Timestamp commentTimeStamp;
+
+    @Column(length = 1000)
     private String commentContent;
 
     public CommentsDetails() {}

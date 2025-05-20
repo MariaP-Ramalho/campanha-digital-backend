@@ -3,12 +3,14 @@ package br.com.wtd.analisedelive.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "comments", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "comment_id")
-})
+@Table(name = "comments")
 public class CommentsInfo {
     @Id
-    private String commentId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
+    private String ytCommentId;
     @Embedded
     private CommentsDetailsData commentsDetailsData;
     @Embedded
@@ -23,7 +25,7 @@ public class CommentsInfo {
     public CommentsInfo(){}
 
     public CommentsInfo(String commentId, CommentsDetailsData commentsDetailsData, AuthorDetailsData authorDetailsData, Sentiment sentiment, Interaction interaction) {
-        this.commentId = commentId;
+        this.ytCommentId = commentId;
         this.commentsDetailsData = commentsDetailsData;
         this.authorDetailsData = authorDetailsData;
         this.sentiment = sentiment;
@@ -31,17 +33,25 @@ public class CommentsInfo {
     }
 
     public CommentsInfo(String commentId, CommentsDetailsData commentsDetailsData, AuthorDetailsData authorDetailsData) {
-        this.commentId = commentId;
+        this.ytCommentId = commentId;
         this.commentsDetailsData = commentsDetailsData;
         this.authorDetailsData = authorDetailsData;
     }
 
-    public String getCommentId() {
-        return commentId;
+    public Long getId() {
+        return id;
     }
 
-    public void setCommentId(String commentId) {
-        this.commentId = commentId;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getYtCommentId() {
+        return ytCommentId;
+    }
+
+    public void setYtCommentId(String commentId) {
+        this.ytCommentId = commentId;
     }
 
     public CommentsDetailsData getCommentsDetailsData() {

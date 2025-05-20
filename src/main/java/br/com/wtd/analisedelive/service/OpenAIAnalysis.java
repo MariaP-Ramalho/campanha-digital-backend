@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 public class OpenAIAnalysis {
@@ -47,9 +46,13 @@ public class OpenAIAnalysis {
         8 = Reclamação
         9 = Reação emocional
 
-      Cada comentário deve ser seguido por sua classificação no formato,
       Siga estritamente o padrão abaixo, não adicione mais nenhuma informação :
-      "<comentário>" → <sentimento> <tipo>
+      "[ID] <comentário>" → <sentimento> <tipo>
+    
+      Exemplo:
+      "[0] Muito bom!" → 2 4
+    
+      Não modifique o ID nem o conteúdo. Apenas classifique.
       Caso não se encaixe exatamente em nenhuma categoria classifique com a categoria mais próxima e sempre siga o padrão fornecido.
     """;
 
@@ -68,9 +71,12 @@ public class OpenAIAnalysis {
     }
 
     private String buildPrompt(List<CommentsInfo> comments) {
-        return comments.stream()
-                .map(c -> "\"" + c.getCommentsDetailsData() + "\"")
-                .collect(Collectors.joining("\n"));
+        StringBuilder prompt = new StringBuilder();
+        for (int i = 0; i < comments.size(); i++) {
+            String text = comments.get(i).getCommentsDetailsData().commentContent();
+            prompt.append(String.format("[%d] \"%s\"\n", i, text));
+        }
+        return prompt.toString();
     }
 
 
@@ -83,7 +89,7 @@ public class OpenAIAnalysis {
                         Map.of("role", "system", "content", SYSTEM_MESSAGE),
                         Map.of("role", "user", "content", prompt)
                 ),
-                "temperature", 0.7
+                "temperature", 0.4
         ));
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -102,27 +108,20 @@ public class OpenAIAnalysis {
         JsonNode root = mapper.readTree(json);
         String content = root.path("choices").get(0).path("message").path("content").asText();
 
-        Pattern pattern = Pattern.compile("^\"?(.*?)\"?\\s*→\\s*(\\d)\\s+(\\d)$", Pattern.MULTILINE);
+        System.out.println("Resposta bruta do OpenAI:\n" + content);
+
+        Pattern pattern = Pattern.compile("^\\[(\\d+)]\\s*\"?(.*?)\"?\\s*→\\s*(\\d)\\s+(\\d)$", Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(content);
 
         while (matcher.find()) {
-            String commentText = matcher.group(1).trim();
-            int sentimentCode = Integer.parseInt(matcher.group(2));
-            int interactionCode = Integer.parseInt(matcher.group(3));
+            int index = Integer.parseInt(matcher.group(1));
+            int sentimentCode = Integer.parseInt(matcher.group(3));
+            int interactionCode = Integer.parseInt(matcher.group(4));
 
-            CommentsInfo match = batch.stream()
-                    .filter(c -> {
-                        String cText = c.getCommentsDetailsData().commentContent();
-                        return normalize(cText).contains(normalize(commentText)) ||
-                                normalize(commentText).contains(normalize(cText));
-                    })
-                    .findFirst()
-                    .orElse(null);
-
-
-            if (match != null) {
-                match.setSentiment(Sentiment.fromCode(sentimentCode));
-                match.setInteraction(Interaction.fromCode(interactionCode));
+            if (index >= 0 && index < batch.size()) {
+                CommentsInfo comment = batch.get(index);
+                comment.setSentiment(Sentiment.fromCode(sentimentCode));
+                comment.setInteraction(Interaction.fromCode(interactionCode));
             }
         }
     }
