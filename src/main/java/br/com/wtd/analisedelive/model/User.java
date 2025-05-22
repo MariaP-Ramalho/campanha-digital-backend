@@ -1,5 +1,6 @@
 package br.com.wtd.analisedelive.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Live> lives;
 
     public void setId(Long id) {

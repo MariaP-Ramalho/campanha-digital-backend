@@ -4,6 +4,7 @@ import br.com.wtd.analisedelive.model.Live;
 import br.com.wtd.analisedelive.repository.LiveRepository;
 import br.com.wtd.analisedelive.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ public class LiveController {
 
     @GetMapping
     public List<Live> listarLives(@AuthenticationPrincipal UserDetails userDetails) {
+        System.out.println(" Usuário autenticado: " + userDetails.getUsername());
         var user = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
         return liveRepo.findByUserId(user.getId());
     }
@@ -27,6 +29,10 @@ public class LiveController {
     @PostMapping
     public ResponseEntity<String> adicionarLive(@RequestBody Live novaLive,
                                                 @AuthenticationPrincipal UserDetails userDetails) {
+        System.out.println("Usuário autenticado no /lives: " + userDetails);
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
+        }
         var user = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
         novaLive.setUser(user);
         liveRepo.save(novaLive);

@@ -1,10 +1,9 @@
 package br.com.wtd.analisedelive.service;
 
-import br.com.wtd.analisedelive.model.CommentsDetailsData;
-import br.com.wtd.analisedelive.model.CommentsInfo;
-import br.com.wtd.analisedelive.model.CommentsInfoData;
-import br.com.wtd.analisedelive.model.GeneralInfoData;
+import br.com.wtd.analisedelive.model.*;
 import br.com.wtd.analisedelive.repository.CommentsRepository;
+import br.com.wtd.analisedelive.repository.LiveRepository;
+import br.com.wtd.analisedelive.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +12,31 @@ import java.util.List;
 
 @Service
 public class LiveAnalysisManager {
+    private Long userId;
+    private String liveId;
+    private String activeChatId;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private LiveRepository liveRepository;
     private final CheckLiveActivity checkLive = new CheckLiveActivity();
     private final FetchLiveComments fetchLiveComments = new FetchLiveComments();
     private final CommentsRepository repository;
     private final ConvertData converter = new ConvertData();
     private final OpenAIAnalysis openAIAnalysis;
 
-    private String activeChatId = null;
-    private String currentLiveId; // novo campo
+    private String currentLiveId;
 
+    private User user;
+    private Live live;
+    private boolean running;
+
+    public void configureAnalysis(Long userId, String liveId) {
+        this.user = userRepository.findById(userId).orElseThrow();
+        this.live = liveRepository.findByLiveId(liveId).orElseThrow();
+    }
 
     @Autowired
     public LiveAnalysisManager(CommentsRepository repository, OpenAIAnalysis openAIAnalysis) {
@@ -43,7 +57,8 @@ public class LiveAnalysisManager {
 
 
     public void executeAnalysis() {
-        if (activeChatId == null) return;
+        if (activeChatId == null || user == null || live == null) return;
+
         try {
             String json = fetchLiveComments.fetchLiveComments(activeChatId);
             GeneralInfoData generalInfoData = converter.getData(json, GeneralInfoData.class);
@@ -58,16 +73,16 @@ public class LiveAnalysisManager {
 
         for (CommentsInfoData data : generalInfoData.commentsInfo()) {
             CommentsInfo comment = getCommentsInfo(data);
-
+            comment.setUser(user);
+            comment.setLive(live);
             allComments.add(comment);
         }
-        
+
         openAIAnalysis.analyzeCommentsBatch(allComments);
-        
+
         for (CommentsInfo comment : allComments) {
             try {
                 repository.save(comment);
-                System.out.println("Salvo com liveVideoId: " + comment.getLiveVideoId());
             } catch (Exception e) {
                 System.out.println("Erro ao salvar comentário: " + e.getMessage());
             }

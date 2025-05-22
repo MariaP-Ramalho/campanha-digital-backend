@@ -1,5 +1,6 @@
 package br.com.wtd.analisedelive.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,9 +12,11 @@ public class CommentsInfo {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "live_id")
     private Live live;
 
     @Column(unique = true)

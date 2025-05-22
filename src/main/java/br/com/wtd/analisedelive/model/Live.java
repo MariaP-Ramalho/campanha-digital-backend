@@ -1,5 +1,6 @@
 package br.com.wtd.analisedelive.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class Live {
     private User user;
 
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<CommentsInfo> comments;
 
     public Long getId() {
