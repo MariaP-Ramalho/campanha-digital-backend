@@ -4,7 +4,7 @@ import br.com.wtd.analisedelive.model.CommentsDetailsData;
 import br.com.wtd.analisedelive.model.CommentsInfo;
 import br.com.wtd.analisedelive.model.CommentsInfoData;
 import br.com.wtd.analisedelive.model.GeneralInfoData;
-import br.com.wtd.analisedelive.repository.CommentRespository;
+import br.com.wtd.analisedelive.repository.CommentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class LiveAnalysisManager {
 
     private final CheckLiveActivity checkLive = new CheckLiveActivity();
     private final FetchLiveComments fetchLiveComments = new FetchLiveComments();
-    private final CommentRespository repository;
+    private final CommentsRepository repository;
     private final ConvertData converter = new ConvertData();
     private final OpenAIAnalysis openAIAnalysis;
 
@@ -25,7 +25,7 @@ public class LiveAnalysisManager {
 
 
     @Autowired
-    public LiveAnalysisManager(CommentRespository repository, OpenAIAnalysis openAIAnalysis) {
+    public LiveAnalysisManager(CommentsRepository repository, OpenAIAnalysis openAIAnalysis) {
         this.repository = repository;
         this.openAIAnalysis = openAIAnalysis;
     }

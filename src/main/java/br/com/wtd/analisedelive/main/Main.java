@@ -3,7 +3,7 @@ package br.com.wtd.analisedelive.main;
 import br.com.wtd.analisedelive.model.CommentsInfo;
 import br.com.wtd.analisedelive.model.CommentsInfoData;
 import br.com.wtd.analisedelive.model.GeneralInfoData;
-import br.com.wtd.analisedelive.repository.CommentRespository;
+import br.com.wtd.analisedelive.repository.CommentsRepository;
 import br.com.wtd.analisedelive.service.CheckLiveActivity;
 import br.com.wtd.analisedelive.service.ConvertData;
 import br.com.wtd.analisedelive.service.FetchLiveComments;
@@ -17,11 +17,11 @@ import java.util.Scanner;
 public class Main {
     private final CheckLiveActivity checkLive = new CheckLiveActivity();
     private final FetchLiveComments fetchLiveComments = new FetchLiveComments();
-    private final CommentRespository repository;
+    private final CommentsRepository repository;
     private final ConvertData converter = new ConvertData();
     private final OpenAIAnalysis openAIAnalysis;
 
-    public Main(CommentRespository repository, OpenAIAnalysis openAIAnalysis) {
+    public Main(CommentsRepository repository, OpenAIAnalysis openAIAnalysis) {
         this.repository = repository;
         this.openAIAnalysis = openAIAnalysis;
     }

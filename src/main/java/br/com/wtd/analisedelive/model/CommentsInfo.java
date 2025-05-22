@@ -9,6 +9,13 @@ public class CommentsInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    private Live live;
+
     @Column(unique = true)
     private String ytCommentId;
     @Embedded
@@ -94,5 +101,21 @@ public class CommentsInfo {
 
     public void setLiveVideoId(String liveVideoId) {
         this.liveVideoId = liveVideoId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Live getLive() {
+        return live;
+    }
+
+    public void setLive(Live live) {
+        this.live = live;
     }
 }
