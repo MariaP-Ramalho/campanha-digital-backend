@@ -1,27 +1,30 @@
 package br.com.wtd.analisedelive.controller;
 
 import br.com.wtd.analisedelive.model.CommentsInfo;
+import br.com.wtd.analisedelive.model.Live;
 import br.com.wtd.analisedelive.model.User;
 import br.com.wtd.analisedelive.repository.CommentsRepository;
+import br.com.wtd.analisedelive.repository.LiveRepository;
 import br.com.wtd.analisedelive.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/comments")
 public class CommentsController {
     @Autowired
     private CommentsRepository commentsRepository;
-    @Autowired private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/{liveId}")
     public ResponseEntity<List<CommentsInfo>> getCommentsForLive(@PathVariable String liveId,
@@ -34,5 +37,6 @@ public class CommentsController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+
 }
 

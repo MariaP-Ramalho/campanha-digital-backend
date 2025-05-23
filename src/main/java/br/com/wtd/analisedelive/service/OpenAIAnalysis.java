@@ -3,6 +3,7 @@ package br.com.wtd.analisedelive.service;
 import br.com.wtd.analisedelive.model.CommentsInfo;
 import br.com.wtd.analisedelive.model.Interaction;
 import br.com.wtd.analisedelive.model.Sentiment;
+import br.com.wtd.analisedelive.repository.CommentsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +29,10 @@ public class OpenAIAnalysis {
 
     private static final String OPENAI_URL = "https://api.openai.com/v1/chat/completions";
     private static final ObjectMapper mapper = new ObjectMapper();
+
+    private final CommentsRepository repository;
+
+    private static final int batchSize = 30;
 
     private static final String SYSTEM_MESSAGE = """
     Você é um analista de comentários de lives. Sua tarefa é classificar cada comentário com dois números:
@@ -56,14 +61,20 @@ public class OpenAIAnalysis {
       Caso não se encaixe exatamente em nenhuma categoria classifique com a categoria mais próxima e sempre siga o padrão fornecido.
     """;
 
+    public OpenAIAnalysis(CommentsRepository repository) {
+        this.repository = repository;
+    }
+
     public void analyzeCommentsBatch(List<CommentsInfo> comments) {
-        List<List<CommentsInfo>> batches = partition(comments, 30);
+        List<List<CommentsInfo>> batches = partition(comments, batchSize);
 
         for (List<CommentsInfo> batch : batches) {
             try {
                 String prompt = buildPrompt(batch);
                 String responseJson = callOpenAI(prompt);
                 parseAndApplyResponse(responseJson, batch);
+
+                repository.saveAll(batch);
             } catch (Exception e) {
                 System.err.println("Erro ao analisar lote de comentários: " + e.getMessage());
             }
@@ -132,9 +143,5 @@ public class OpenAIAnalysis {
             partitions.add(list.subList(i, Math.min(i + size, list.size())));
         }
         return partitions;
-    }
-
-    private String normalize(String text) {
-        return text.toLowerCase().replaceAll("[^\\p{IsAlphabetic}\\p{IsDigit}\\s]", "").trim();
     }
 }

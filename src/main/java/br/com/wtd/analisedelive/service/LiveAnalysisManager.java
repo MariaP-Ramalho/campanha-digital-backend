@@ -79,14 +79,6 @@ public class LiveAnalysisManager {
         }
 
         openAIAnalysis.analyzeCommentsBatch(allComments);
-
-        for (CommentsInfo comment : allComments) {
-            try {
-                repository.save(comment);
-            } catch (Exception e) {
-                System.out.println("Erro ao salvar comentário: " + e.getMessage());
-            }
-        }
     }
 
     private CommentsInfo getCommentsInfo(CommentsInfoData data) {
