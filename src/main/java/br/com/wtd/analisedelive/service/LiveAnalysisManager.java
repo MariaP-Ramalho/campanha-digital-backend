@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LiveAnalysisManager {
@@ -33,9 +34,11 @@ public class LiveAnalysisManager {
     private Live live;
     private boolean running;
 
+
     public void configureAnalysis(Long userId, String liveId) {
         this.user = userRepository.findById(userId).orElseThrow();
-        this.live = liveRepository.findByLiveId(liveId).orElseThrow();
+        this.live = liveRepository.findByLiveIdAndUserId(liveId, userId)
+                .orElseThrow(() -> new RuntimeException("Live não encontrada para este usuário"));
     }
 
     @Autowired

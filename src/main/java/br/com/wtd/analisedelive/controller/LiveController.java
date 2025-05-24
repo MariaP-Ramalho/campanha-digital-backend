@@ -28,24 +28,35 @@ public class LiveController {
     private LiveRepository liveRepository;
 
     @GetMapping
-    public List<Live> listarLives(@AuthenticationPrincipal UserDetails userDetails) {
+    public List<Live> listLives(@AuthenticationPrincipal UserDetails userDetails) {
         System.out.println(" Usuário autenticado: " + userDetails.getUsername());
         var user = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
         return liveRepo.findByUserId(user.getId());
     }
 
     @PostMapping
-    public ResponseEntity<String> adicionarLive(@RequestBody Live novaLive,
-                                                @AuthenticationPrincipal UserDetails userDetails) {
-        System.out.println("Usuário autenticado no /lives: " + userDetails);
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autenticado");
+    public ResponseEntity<?> createLive(@RequestBody Map<String, String> body, @AuthenticationPrincipal UserDetails userDetails) {
+        String liveId = body.get("liveId");
+        String title = body.get("title");
+
+        Long userId = userRepository.findByUsername(userDetails.getUsername())
+                .map(User::getId)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
+        if (liveRepository.findByLiveIdAndUserId(liveId, userId).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Você já criou uma live com esse ID.");
         }
-        var user = userRepo.findByUsername(userDetails.getUsername()).orElseThrow();
-        novaLive.setUser(user);
-        liveRepo.save(novaLive);
-        return ResponseEntity.ok("Live adicionada com sucesso");
+
+        User user = userRepository.findById(userId).orElseThrow();
+        Live live = new Live();
+        live.setLiveId(liveId);
+        live.setTitle(title);
+        live.setUser(user);
+
+        liveRepository.save(live);
+        return ResponseEntity.ok().build();
     }
+
 
 
     @DeleteMapping("/{liveId}")
