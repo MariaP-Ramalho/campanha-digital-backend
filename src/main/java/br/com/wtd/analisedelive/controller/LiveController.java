@@ -1,8 +1,10 @@
 package br.com.wtd.analisedelive.controller;
 
 import br.com.wtd.analisedelive.model.Live;
+import br.com.wtd.analisedelive.model.Tag;
 import br.com.wtd.analisedelive.model.User;
 import br.com.wtd.analisedelive.repository.LiveRepository;
+import br.com.wtd.analisedelive.repository.TagRepository;
 import br.com.wtd.analisedelive.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/lives")
@@ -24,6 +27,8 @@ public class LiveController {
     @Autowired private UserRepository userRepo;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TagRepository tagRepository;
     @Autowired
     private LiveRepository liveRepository;
 
@@ -38,6 +43,7 @@ public class LiveController {
     public ResponseEntity<?> createLive(@RequestBody Map<String, String> body, @AuthenticationPrincipal UserDetails userDetails) {
         String liveId = body.get("liveId");
         String title = body.get("title");
+        String tagName = body.get("tagName");
 
         Long userId = userRepository.findByUsername(userDetails.getUsername())
                 .map(User::getId)
@@ -48,10 +54,15 @@ public class LiveController {
         }
 
         User user = userRepository.findById(userId).orElseThrow();
+
+        Tag tag = tagRepository.findByName(tagName)
+                .orElseGet(() -> tagRepository.save(new Tag(tagName)));
+
         Live live = new Live();
         live.setLiveId(liveId);
         live.setTitle(title);
         live.setUser(user);
+        live.setTag(tag);
 
         liveRepository.save(live);
         return ResponseEntity.ok().build();
@@ -80,6 +91,21 @@ public class LiveController {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RestController
+    public class TagController {
+
+        @Autowired
+        private TagRepository tagRepository;
+
+        @GetMapping("/tags")
+        public List<String> getTags() {
+            return tagRepository.findAll()
+                    .stream()
+                    .map(Tag::getName)
+                    .collect(Collectors.toList());
         }
     }
 

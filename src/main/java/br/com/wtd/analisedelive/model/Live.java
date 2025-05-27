@@ -19,6 +19,9 @@ public class Live {
     @ManyToOne
     private User user;
 
+    @ManyToOne
+    private Tag tag;
+
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<CommentsInfo> comments;
@@ -61,5 +64,13 @@ public class Live {
 
     public void setLiveId(String liveId) {
         this.liveId = liveId;
+    }
+
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 }
