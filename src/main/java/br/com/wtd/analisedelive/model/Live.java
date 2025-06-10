@@ -2,8 +2,10 @@ package br.com.wtd.analisedelive.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -14,8 +16,14 @@ public class Live {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
     @NotNull
     private String liveId;
+
     @NotNull
     private String title;
 
@@ -90,4 +98,11 @@ public class Live {
         this.status = status;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
