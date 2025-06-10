@@ -33,6 +33,7 @@ public class LiveAnalysisManager {
     private User user;
     private Live live;
     private boolean running;
+    private int emptyCount = 0;
 
 
     public void configureAnalysis(Long userId, String liveId) {
@@ -51,12 +52,17 @@ public class LiveAnalysisManager {
         try {
             this.currentLiveId = liveID;
             this.activeChatId = checkLive.checkActivity(liveID);
+            live.setStatus(LiveStatus.ATIVO);
+            liveRepository.save(live);
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao iniciar análise: " + e.getMessage());
+            live.setStatus(LiveStatus.FINALIZADO);
+            liveRepository.save(live);
             return false;
         }
     }
+
 
 
     public void executeAnalysis() {
@@ -65,11 +71,35 @@ public class LiveAnalysisManager {
         try {
             String json = fetchLiveComments.fetchLiveComments(activeChatId);
             GeneralInfoData generalInfoData = converter.getData(json, GeneralInfoData.class);
-            processComments(generalInfoData);
+
+            if (generalInfoData.commentsInfo().isEmpty()) {
+                emptyCount++;
+                System.out.println("Nenhum comentário recebido. Contador: " + emptyCount);
+            } else {
+                emptyCount = 0;
+                processComments(generalInfoData);
+            }
+
+            if (emptyCount >= 3) {
+                emptyCount = 0;
+                boolean ativo = checkLive.isLiveActive(currentLiveId);
+                System.out.println("A live está ativa? " + ativo);
+                boolean stillActive = checkLive.isLiveActive(currentLiveId);
+                System.out.println("Verificando se a live ainda está ativa... Resultado: " + stillActive);
+
+                if (!stillActive) {
+                    System.out.println("Live foi finalizada. Encerrando análise.");
+                    live.setStatus(LiveStatus.FINALIZADO);
+                    liveRepository.save(live);
+                    stopAnalysis();
+                }
+            }
+
         } catch (Exception e) {
             System.out.println("Erro durante análise: " + e.getMessage());
         }
     }
+
 
     private void processComments(GeneralInfoData generalInfoData) {
         List<CommentsInfo> allComments = new ArrayList<>();
@@ -106,6 +136,11 @@ public class LiveAnalysisManager {
 
     public void stopAnalysis() {
         this.activeChatId = null;
+
+        if (live.getStatus() != LiveStatus.FINALIZADO) {
+            live.setStatus(LiveStatus.INATIVO);
+            liveRepository.save(live);
+        }
     }
 
     public boolean isRunning() {

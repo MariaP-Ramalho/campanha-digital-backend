@@ -32,11 +32,26 @@ public class CheckLiveActivity {
         }
 
         JsonNode liveStreamingDetails = items.get(0).get("liveStreamingDetails");
+
+        if (liveStreamingDetails != null && liveStreamingDetails.get("actualEndTime") != null) {
+            throw new Exception("Live finalizada.");
+        }
+
         if (liveStreamingDetails == null || liveStreamingDetails.get("activeLiveChatId") == null) {
             throw new Exception("Live Chat ID não encontrado. A live está realmente ativa?");
         }
 
         return liveStreamingDetails.get("activeLiveChatId").asText();
+    }
+
+
+    public boolean isLiveActive(String liveId) {
+        try {
+            checkActivity(liveId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
 

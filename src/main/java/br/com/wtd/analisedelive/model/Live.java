@@ -2,6 +2,7 @@ package br.com.wtd.analisedelive.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -13,14 +14,21 @@ public class Live {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String liveId;
+    @NotNull
     private String title;
 
     @ManyToOne
     private User user;
 
     @ManyToOne
+    @NotNull
     private Tag tag;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private LiveStatus status = LiveStatus.INATIVO;
 
     @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -73,4 +81,13 @@ public class Live {
     public void setTag(Tag tag) {
         this.tag = tag;
     }
+
+    public LiveStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LiveStatus status) {
+        this.status = status;
+    }
+
 }

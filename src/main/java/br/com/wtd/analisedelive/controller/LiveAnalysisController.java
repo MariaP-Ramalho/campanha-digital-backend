@@ -1,8 +1,6 @@
 package br.com.wtd.analisedelive.controller;
 
-import br.com.wtd.analisedelive.model.Live;
 import br.com.wtd.analisedelive.model.User;
-import br.com.wtd.analisedelive.repository.LiveRepository;
 import br.com.wtd.analisedelive.repository.UserRepository;
 import br.com.wtd.analisedelive.service.LiveAnalysisManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,8 @@ public class LiveAnalysisController {
     private LiveAnalysisManager manager;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    private LiveAnalysisManager analysisManager;
 
     @PostMapping("/start/{liveId}")
     public ResponseEntity<String> start(@PathVariable String liveId,

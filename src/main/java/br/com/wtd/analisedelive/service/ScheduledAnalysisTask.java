@@ -9,7 +9,7 @@ public class ScheduledAnalysisTask {
     @Autowired
     private LiveAnalysisManager manager;
 
-    @Scheduled(fixedRate = 300) // 5 minutos
+    @Scheduled(fixedRate = 10 * 1000) // 5 minutos  5 * 60 * 1000
     public void runScheduledTask() {
         if (manager.isRunning()) {
             manager.executeAnalysis();
