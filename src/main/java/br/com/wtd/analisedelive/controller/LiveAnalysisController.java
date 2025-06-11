@@ -34,7 +34,7 @@ public class LiveAnalysisController {
 
             return started
                     ? ResponseEntity.ok("Análise iniciada para a live: " + liveId)
-                    : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao iniciar análise.");
+                    : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao iniciar análise. Live inativa.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao configurar análise: " + e.getMessage());

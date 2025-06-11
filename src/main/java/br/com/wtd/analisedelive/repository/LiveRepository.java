@@ -1,6 +1,7 @@
 package br.com.wtd.analisedelive.repository;
 
 import br.com.wtd.analisedelive.model.Live;
+import br.com.wtd.analisedelive.model.Tag;
 import br.com.wtd.analisedelive.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,8 @@ import java.util.Optional;
 public interface LiveRepository extends JpaRepository<Live, Long> {
     List<Live> findByUserId(Long userId);
     Optional<Live> findByLiveIdAndUserId(String liveId, Long userId);
+
+    long countByTag(Tag tag);
 
     Optional<Live> findByLiveId(String liveId);
 }

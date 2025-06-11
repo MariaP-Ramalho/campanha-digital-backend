@@ -71,11 +71,21 @@ public class LiveController {
 
 
     @DeleteMapping("/{liveId}")
-    public ResponseEntity<Void> deleteLive(@PathVariable String liveId, @AuthenticationPrincipal UserDetails userDetails) {
-        Optional<Live> live = liveRepository.findByLiveIdAndUserId(liveId, getUserId(userDetails));
-        if (live.isPresent()) {
-            liveRepository.delete(live.get());
-            return ResponseEntity.ok().build();
+    public ResponseEntity<Void> deleteLive(@PathVariable String liveId) {
+        Optional<Live> optionalLive = liveRepository.findByLiveId(liveId);
+
+        if (optionalLive.isPresent()) {
+            Live live = optionalLive.get();
+            Tag tag = live.getTag();
+
+            liveRepository.delete(live);
+
+            boolean isTagUnused = liveRepository.countByTag(tag) == 0;
+            if (isTagUnused) {
+                tagRepository.delete(tag);
+            }
+
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
