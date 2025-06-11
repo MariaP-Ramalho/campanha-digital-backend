@@ -13,9 +13,8 @@ import java.util.Optional;
 public interface LiveRepository extends JpaRepository<Live, Long> {
     List<Live> findByUserId(Long userId);
     Optional<Live> findByLiveIdAndUserId(String liveId, Long userId);
-
+    Optional<Live> findByLiveId(String liveId);
     long countByTag(Tag tag);
 
-    Optional<Live> findByLiveId(String liveId);
 }
 

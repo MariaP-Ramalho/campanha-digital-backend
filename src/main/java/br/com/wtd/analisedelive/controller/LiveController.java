@@ -104,6 +104,34 @@ public class LiveController {
         }
     }
 
+    @PutMapping("/{liveId}/tag")
+    public ResponseEntity<?> updateTag(
+            @PathVariable String liveId,
+            @RequestBody Map<String, String> payload) {
+
+        String newTagName = payload.get("tagName");
+
+        Optional<Live> optionalLive = liveRepository.findByLiveId(liveId);
+        if (optionalLive.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Live live = optionalLive.get();
+        Tag oldTag = live.getTag();
+
+        Tag newTag = tagRepository.findByNameIgnoreCase(newTagName)
+                .orElseGet(() -> tagRepository.save(new Tag(newTagName)));
+
+        live.setTag(newTag);
+        liveRepository.save(live);
+
+        if (liveRepository.countByTag(oldTag) == 0) {
+            tagRepository.delete(oldTag);
+        }
+        return ResponseEntity.ok("Tag atualizada com sucesso.");
+    }
+
+
     @RestController
     public class TagController {
 
