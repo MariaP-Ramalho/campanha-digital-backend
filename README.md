@@ -1,13 +1,9 @@
 # Campanha Digital 📊 
 
 Bem-vindo à Campanha Digital!
-Aqui você pode analisar o desempenho da sua live e da sua concorrência no Youtube!
-
----
+Um sistema desenvolvido para **analisar o desempenho de lives no YouTube** por meio de **Inteligência Artificial** aplicada à categorização e análise de comentários. 
 
 ## 🎯 **Objetivo**
-
-A **Campanha Digital** é um sistema desenvolvido para **analisar o desempenho de lives no YouTube** por meio de **Inteligência Artificial** aplicada à categorização e análise de comentários.  
 
 ### 🔎 **Coleta de Dados** 
 O sistema captura e armazena todos os comentários das lives a partir do início da análise, registrando informações como:  
