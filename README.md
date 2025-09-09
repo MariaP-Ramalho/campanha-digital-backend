@@ -9,7 +9,7 @@ Aqui você pode analisar o desempenho da sua live e da sua concorrência no Yout
 
 A **Campanha Digital** é um sistema desenvolvido para **analisar o desempenho de lives no YouTube** por meio de **Inteligência Artificial** aplicada à categorização e análise de comentários.  
 
-### 🔎 Coleta de Dados  
+### 🔎 **Coleta de Dados** 
 O sistema captura e armazena todos os comentários das lives a partir do início da análise, registrando informações como:  
 - ⏱ **Timestamp** do comentário  
 - 👤 **Nome do usuário**  
@@ -78,8 +78,8 @@ Para utilizar a **YouTube Data API v3**, é necessário gerar uma chave de API n
 É necessário um arquivo `.env` na raiz do projeto com a seguinte estrutura: 
 
 ```declarative
-OPENAI_API_KEY=
-YOUTUBE_API_KEY=AIzaSyC1j9GRLPffqyM7v7eySwFXCtXjpwceLGI
+OPENAI_API_KEY=sua_chave_openIA
+YOUTUBE_API_KEY=sua_chave_youtube
 ```
 
 ---
