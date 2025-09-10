@@ -114,7 +114,7 @@ campanha-digital
 - **Senha:** `postgres`
 - **Porta:** 5432
 
-Obs.: essas são as configurações definidas no arquivo `src/main/resources/application.yml`
+> Obs.: essas são as configurações definidas no arquivo `src/main/resources/application.yml`
 
 Certifique-se de que o PostgreSQL esteja rodando corretamente em sua máquina local para que o backend se conecte ao banco de dados.
 
@@ -128,7 +128,7 @@ Com as dependências configuradas, vamos rodar o projeto. Para isso, execute o s
 mvn clean spring-boot:run
 ```
 
-Obs.: O `clean` é opcional, mas recomendado caso precise limpar o build e começar de novo.
+> Obs.: O `clean` é opcional, mas recomendado caso precise limpar o build e começar de novo.
 
 ---
 
