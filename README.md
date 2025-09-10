@@ -64,7 +64,7 @@ Para utilizar a **YouTube Data API v3**, é necessário gerar uma chave de API n
 
 --- 
 
-## 🤖 Criação da Chave da API da OpenIa
+## 🤖 Criação da Chave da API da OpenIA
 
 1. **Crie uma Conta na OpenAI**
    - Acesse o site da [OpenAI](https://openai.com/pt-BR/).
@@ -77,7 +77,7 @@ Para utilizar a **YouTube Data API v3**, é necessário gerar uma chave de API n
   
 3. **Crie uma Nova API Key**
    - Clique no botão “Create new secret key”.
-   - Dê um nome para a sua chave, algo que ajude você a identificá-la no futuro, como “API do curso”.
+   - Dê um nome para a sua chave, algo que ajude você a identificá-la no futuro.
    - Clique em “Create secret key”.
   
 4. **Copie e Guarde sua API Key**
