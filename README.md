@@ -64,8 +64,28 @@ Para utilizar a **YouTube Data API v3**, é necessário gerar uma chave de API n
 
 --- 
 
-## 🤖 Criação da Chave da API da OpenIa
+## 🤖 Criação da Chave da API da OpenIA
 
+1. **Crie uma Conta na OpenAI**
+   - Acesse o site da [OpenAI](https://openai.com/pt-BR/).
+   - Clique em “Sign Up” no canto superior direito da página.
+   -Preencha os campos necessários com suas informações ou faça login utilizando sua conta do Google.
+
+3. **Acesse a Área de API Keys**
+   - No painel principal da OpenAI, clique em “API” no menu lateral esquerdo.
+   - Em seguida, clique em “API Keys”.
+  
+3. **Crie uma Nova API Key**
+   - Clique no botão “Create new secret key”.
+   - Dê um nome para a sua chave, algo que ajude você a identificá-la no futuro.
+   - Clique em “Create secret key”.
+  
+4. **Copie e Guarde sua API Key**
+Após criar a chave, a OpenAI exibirá o valor da sua API Key. É crucial que você copie e guarde esse valor em um lugar seguro, pois ele só será exibido uma vez. Se você perder essa chave, será necessário criar uma nova.
+
+> ⚠️ **Observação**  
+> A API da OpenAI é um serviço pago.  
+> Caso você esteja avaliando este projeto para fins de recrutamento e deseje testá-lo em funcionamento, poderá solicitar uma chave temporária diretamente comigo pelo e-mail: **eduardapramalho@gmail.com**
 
 ---
 
@@ -94,7 +114,7 @@ campanha-digital
 - **Senha:** `postgres`
 - **Porta:** 5432
 
-Obs.: essas são as configurações definidas no arquivo `src/main/resources/application.yml`
+> Obs.: essas são as configurações definidas no arquivo `src/main/resources/application.yml`
 
 Certifique-se de que o PostgreSQL esteja rodando corretamente em sua máquina local para que o backend se conecte ao banco de dados.
 
@@ -108,7 +128,7 @@ Com as dependências configuradas, vamos rodar o projeto. Para isso, execute o s
 mvn clean spring-boot:run
 ```
 
-Obs.: O `clean` é opcional, mas recomendado caso precise limpar o build e começar de novo.
+> Obs.: O `clean` é opcional, mas recomendado caso precise limpar o build e começar de novo.
 
 ---
 
@@ -116,4 +136,7 @@ Obs.: O `clean` é opcional, mas recomendado caso precise limpar o build e come�
 Agora que o BackEnd está rodando, você pode visualizar e testar a API diretamente no Swagger UI!
 
 Acesse em:
-http://localhost:8090/swagger-ui.html
+http://localhost:8080/swagger-ui.html
+
+## FrontEnd
+Você pode acessar o frontEnd através do link a seguir: https://github.com/MariaP-Ramalho/campanha-digital-frontend
