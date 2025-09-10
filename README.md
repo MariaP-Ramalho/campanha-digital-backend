@@ -136,7 +136,7 @@ Obs.: O `clean` é opcional, mas recomendado caso precise limpar o build e come�
 Agora que o BackEnd está rodando, você pode visualizar e testar a API diretamente no Swagger UI!
 
 Acesse em:
-http://localhost:8090/swagger-ui.html
+http://localhost:8080/swagger-ui.html
 
 ## FrontEnd
 Você pode acessar o frontEnd através do link a seguir: https://github.com/MariaP-Ramalho/campanha-digital-frontend
