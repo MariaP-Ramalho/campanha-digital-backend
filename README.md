@@ -139,4 +139,4 @@ Acesse em:
 http://localhost:8080/swagger-ui.html
 
 ## FrontEnd
-Você pode acessar o frontEnd através do link a seguir: https://github.com/MariaP-Ramalho/campanha-digital-frontend
+Você pode acessar o frontend através do link a seguir: https://github.com/MariaP-Ramalho/campanha-digital-frontend
