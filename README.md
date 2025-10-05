@@ -2,6 +2,7 @@
 
 Bem-vindo à Campanha Digital!
 Um sistema desenvolvido para **analisar o desempenho de lives no YouTube** por meio de **Inteligência Artificial** aplicada à categorização e análise de comentários. 
+[🎥Video do Funcionamento](https://drive.google.com/file/d/18TV_7RNsPED-IxcD3SSZVstWFukeFZTU/view?usp=sharing)
 
 ## 🎯 **Objetivo**
 
