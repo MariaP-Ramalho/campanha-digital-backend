@@ -1,4 +1,4 @@
-# Campanha Digital 📊 
+# Campanha Digital 📊 (em aprimoramento)
 
 Bem-vindo à Campanha Digital!
 Um sistema desenvolvido para **analisar o desempenho de lives no YouTube** por meio de **Inteligência Artificial** aplicada à categorização e análise de comentários. 
